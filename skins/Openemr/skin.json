@@ -7,7 +7,6 @@
 			"args": [ {
 				"name": "openemr",
 				"responsive": true,
-				"templateDirectory": "skins/Openemr/templates",
 				"styles": [
 					"skins.openemr"
 				],
