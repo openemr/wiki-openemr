@@ -1,5 +1,6 @@
 # environment vars
 .env
-
 # images
-images/
+mediawiki-docker/images/
+# database dumps
+*.sql

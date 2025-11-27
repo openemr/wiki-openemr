@@ -101,10 +101,11 @@ $wgEnotifWatchlist = false; # UPO
 $wgEmailAuthentication = true;
 
 ## Database settings
-$wgDBtype           = "mysql";
-$wgDBserver         = "db";
-$wgDBname           = "mediawiki";
-$wgDBuser           = "wiki";
+$wgDBserver = getenv('DB_HOST') ?: 'db';
+$wgDBname = getenv('DB_NAME') ?: 'mediawiki';
+$wgDBuser = getenv('DB_USER') ?: 'wiki';
+$wgDBpassword = getenv('DB_PASS');
+$wgSecretKey = getenv('MW_SECRET_KEY');
 
 ## Email settings
 $wgSMTP = array(

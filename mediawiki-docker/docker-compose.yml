@@ -1,6 +1,12 @@
 services:
   mediawiki:
     build: .
+    environment:
+    - DB_HOST=db
+    - DB_NAME=mediawiki
+    - DB_USER=wiki
+    - DB_PASS=${DB_PASS}
+    - MW_SECRET_KEY=${MW_SECRET_KEY}
     container_name: mediawiki
     restart: unless-stopped
     ports:
