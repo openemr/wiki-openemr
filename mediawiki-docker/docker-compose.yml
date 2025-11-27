@@ -1,0 +1,35 @@
+services:
+  mediawiki:
+    build: .
+    container_name: mediawiki
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./LocalSettings.php:/var/www/html/LocalSettings.php
+      - ./images:/var/www/html/images
+      - ./Oemr_wiki_logo.jpg:/var/www/html/resources/assets/Oemr_wiki_logo.jpg
+      - ./skins/Openemr:/var/www/html/skins/Openemr
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:10.3
+    container_name: mediawiki-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: mediawiki
+      MYSQL_USER: wiki
+      MYSQL_PASSWORD: ${DB_PASS}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
