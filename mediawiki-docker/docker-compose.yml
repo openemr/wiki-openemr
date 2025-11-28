@@ -14,8 +14,10 @@ services:
     volumes:
       - ./LocalSettings.php:/var/www/html/LocalSettings.php
       - ./images:/var/www/html/images
-      - ./Oemr_wiki_logo.jpg:/var/www/html/resources/assets/Oemr_wiki_logo.jpg
       - ./skins/Openemr:/var/www/html/skins/Openemr
+      - ./assets:/var/www/html/assets
+      - ./apache-alias.conf:/etc/apache2/conf-enabled/mediawiki-alias.conf
+      - ./robots.txt:/var/www/html/robots.txt
     depends_on:
       db:
         condition: service_healthy

@@ -16,6 +16,11 @@
 
 # If you customize your file layout, set $IP to the directory that contains
 # the other MediaWiki files. It will be used as a base to locate files.
+
+# have to override here or add to docker build
+error_reporting( 0 );
+ini_set( 'display_errors', 0 );
+
 if( defined( 'MW_INSTALL_PATH' ) ) {
 	$IP = MW_INSTALL_PATH;
 } else {
@@ -75,7 +80,7 @@ $wgFileExtensions = array_merge($wgFileExtensions, array( 'pdf', 'txt', 'zip', '
 ## defaults for all runtime URL paths are based off of this.
 ## For more information on customizing the URLs please see:
 ## http://www.mediawiki.org/wiki/Manual:Short_URL
-$wgScriptPath       = "";
+$wgScriptPath       = "/wiki";
 $wgScriptExtension  = ".php";
 
 ## Help block vandals
@@ -86,7 +91,7 @@ $wgStylePath        = "$wgScriptPath/skins";
 
 ## The relative URL path to the logo.  Make sure you change this from the default,
 ## or else you'll overwrite your logo when you upgrade!
-$wgLogo             = "$wgScriptPath/Oemr_wiki_logo.jpg";
+$wgLogo = "$wgScriptPath/assets/openemr-logo-wiki.svg";
 
 ## UPO means: this is also a user preference option
 
