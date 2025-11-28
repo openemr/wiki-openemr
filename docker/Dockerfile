@@ -1,4 +1,4 @@
-FROM mediawiki:1.39
+FROM mediawiki:1.44
 
 # Install git for cloning extensions
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*

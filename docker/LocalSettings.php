@@ -75,7 +75,6 @@ $wgFileExtensions = array_merge($wgFileExtensions, array( 'pdf', 'txt', 'zip', '
 ## For more information on customizing the URLs please see:
 ## http://www.mediawiki.org/wiki/Manual:Short_URL
 $wgScriptPath       = "/wiki";
-$wgScriptExtension  = ".php";
 
 ## Help block vandals
 $wgSquidServers = array('172.29.30.65', '172.29.30.66', '172.29.30.67', '172.29.30.68', '172.29.30.69', '172.29.30.70');
@@ -121,9 +120,6 @@ $wgDBprefix         = "";
 
 # MySQL table options to use during installation or update
 $wgDBTableOptions   = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
-
-# Experimental charset support for MySQL 4.1/5.0.
-$wgDBmysql5 = true;
 
 ## Shared memory settings
 $wgMainCacheType = CACHE_NONE;
