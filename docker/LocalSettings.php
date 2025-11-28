@@ -18,26 +18,20 @@
 # the other MediaWiki files. It will be used as a base to locate files.
 
 # have to override here or add to docker build
-error_reporting( 0 );
-ini_set( 'display_errors', 0 );
+#error_reporting( 0 );
+#ini_set( 'display_errors', 0 );
 
-if( defined( 'MW_INSTALL_PATH' ) ) {
-	$IP = MW_INSTALL_PATH;
-} else {
-	$IP = dirname( __FILE__ );
+# Protect against web entry
+if ( !defined( 'MEDIAWIKI' ) ) {
+    exit;
 }
 
-$path = array( $IP, "$IP/includes", "$IP/languages" );
-set_include_path( implode( PATH_SEPARATOR, $path ) . PATH_SEPARATOR . get_include_path() );
+$wgExtensionDirectory = "$IP/extensions";
+$wgStyleDirectory = "$IP/skins";
 
+$wgArticlePath = "/wiki/$1";
+$wgUsePathInfo = true;
 
-# SETTING SESSIONS FOR SOURCEFORGE
-#  Note this will need to be removed (along with sessions directory) if migrate site away from sourceforge.
-# session_save_path("/home/project-web/openemr/htdocs/sessions/");
-#
-# SETTINGS SESSIONS FOR SOURCEFORGE
-
-require_once( "$IP/includes/DefaultSettings.php" );
 #require_once("$IP/extensions/ConfirmAccount/SpecialConfirmAccount.php");
 #require_once("$IP/extensions/MultiUpload/MultiUpload.php");
 $wgMaxUploadFiles = 5;

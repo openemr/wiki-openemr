@@ -1,4 +1,4 @@
-FROM mediawiki:1.36
+FROM mediawiki:1.39
 
 # Install git for cloning extensions
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
@@ -7,3 +7,8 @@ RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 RUN git clone --depth 1 -b v2.9.0 \
     https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git \
     /var/www/html/extensions/EmbedVideo
+
+# CloudflarePurge
+RUN git clone --depth 1 \
+    https://gerrit.wikimedia.org/r/mediawiki/extensions/CloudflarePurge \
+    /var/www/html/extensions/CloudflarePurge
