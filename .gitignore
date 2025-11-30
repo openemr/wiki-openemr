@@ -2,7 +2,5 @@
 .env
 # images
 docker/images/
-# static files
-
 # database dumps
 *.sql
