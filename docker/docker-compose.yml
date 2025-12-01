@@ -19,11 +19,13 @@ services:
       - ./images:/var/www/html/images
       - ./skins/Openemr:/var/www/html/skins/Openemr
       - ./assets:/var/www/html/assets
-      - ./static-files:/var/www/static-files:ro
+      - static-files:/var/www/static-files:ro
       - ./apache-alias.conf:/etc/apache2/conf-enabled/apache-alias.conf
     depends_on:
       db:
         condition: service_healthy
+      static-files-sync:
+        condition: service_completed_successfully
 
   db:
     image: mariadb:10.11
@@ -42,5 +44,21 @@ services:
       timeout: 5s
       retries: 5
 
+  static-files-sync:
+    image: alpine/git
+    container_name: static-files-sync
+    volumes:
+      - static-files:/static-files
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        if [ -d /static-files/.git ]; then
+          cd /static-files && git pull
+        else
+          git clone --depth 1 https://github.com/openemr/website-openemr-files.git /static-files
+        fi
+
 volumes:
   db_data:
+  static-files:
