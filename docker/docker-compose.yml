@@ -1,0 +1,74 @@
+services:
+  mediawiki:
+    build: .
+    container_name: mediawiki
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - DB_HOST=127.0.0.1
+      - DB_NAME=mediawiki
+      - DB_USER=wiki
+      - DB_PASS=${DB_PASS}
+      - MW_SECRET_KEY=${MW_SECRET_KEY}
+      - MW_SERVER=${MW_SERVER}
+      - CF_ZONE_ID=${CF_ZONE_ID}
+      - CF_API_TOKEN=${CF_API_TOKEN}
+    volumes:
+      - ./LocalSettings.php:/var/www/html/LocalSettings.php
+      - ./images:/var/www/html/images
+      - ./skins/Openemr:/var/www/html/skins/Openemr
+      - ./assets:/var/www/html/assets
+      - static-files:/var/www/static-files:ro
+      - ./apache-alias.conf:/etc/apache2/conf-enabled/apache-alias.conf
+    depends_on:
+      db:
+        condition: service_healthy
+      static-files-sync:
+        condition: service_completed_successfully
+
+  db:
+    image: mariadb:10.11
+    container_name: mediawiki-db
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: mediawiki
+      MYSQL_USER: wiki
+      MYSQL_PASSWORD: ${DB_PASS}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mariadb", "-h", "127.0.0.1", "-u", "root", "-p${DB_ROOT_PASS}", "-e", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  static-files-sync:
+    image: alpine/git
+    container_name: static-files-sync
+    network_mode: host
+    volumes:
+      - static-files:/static-files
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        git config --global http.lowSpeedLimit 1000
+        git config --global http.lowSpeedTime 300
+        if [ -d /static-files/.git ]; then
+          cd /static-files && git pull
+        else
+          MAX_RETRIES=3
+          RETRY=0
+          until [ $$RETRY -ge $$MAX_RETRIES ]; do
+            git clone --depth 1 --single-branch https://github.com/openemr/website-openemr-files.git /static-files && break
+            RETRY=$$((RETRY+1))
+            echo "Clone failed, retry $$RETRY of $$MAX_RETRIES..."
+            sleep 30
+          done
+        fi
+
+volumes:
+  db_data:
+  static-files:
