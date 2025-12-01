@@ -4,13 +4,14 @@ services:
     container_name: mediawiki
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "80:80"
     environment:
     - DB_HOST=db
     - DB_NAME=mediawiki
     - DB_USER=wiki
     - DB_PASS=${DB_PASS}
     - MW_SECRET_KEY=${MW_SECRET_KEY}
+    - MW_SERVER=${MW_SERVER}
     - CF_ZONE_ID=${CF_ZONE_ID}
     - CF_API_TOKEN=${CF_API_TOKEN}
     volumes:
@@ -18,13 +19,11 @@ services:
       - ./images:/var/www/html/images
       - ./skins/Openemr:/var/www/html/skins/Openemr
       - ./assets:/var/www/html/assets
-      - static-files:/var/www/static-files:ro
+      - ./static-files:/var/www/static-files:ro
       - ./apache-alias.conf:/etc/apache2/conf-enabled/apache-alias.conf
     depends_on:
       db:
         condition: service_healthy
-      static-files-sync:
-        condition: service_completed_successfully
 
   db:
     image: mariadb:10.11
@@ -43,21 +42,5 @@ services:
       timeout: 5s
       retries: 5
 
-  static-files-sync:
-    image: alpine/git
-    container_name: static-files-sync
-    volumes:
-      - static-files:/static-files
-    entrypoint: /bin/sh
-    command:
-      - -c
-      - |
-        if [ -d /static-files/.git ]; then
-          cd /static-files && git pull
-        else
-          git clone https://github.com/openemr/website-openemr-files.git /static-files
-        fi
-
 volumes:
   db_data:
-  static-files:
