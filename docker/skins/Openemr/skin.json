@@ -7,7 +7,7 @@
 			"args": [ {
 				"name": "openemr",
 				"responsive": true,
-				"templateDirectory": "skins/Openemr/templates",
+				"templateDirectory": "templates",
 				"styles": [
 					"skins.openemr"
 				],
@@ -30,7 +30,7 @@
 	},
 	"ResourceModules": {
 		"skins.openemr": {
-			"class": "ResourceLoaderSkinModule",
+			"class": "MediaWiki\\ResourceLoader\\SkinModule",
 			"features": {
 				"normalize": true,
 				"elements": true,
