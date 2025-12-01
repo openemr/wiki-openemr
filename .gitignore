@@ -1,0 +1,6 @@
+# environment vars
+.env
+# images
+docker/images/
+# database dumps
+*.sql

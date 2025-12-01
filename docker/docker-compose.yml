@@ -3,6 +3,7 @@ services:
     build: .
     container_name: mediawiki
     restart: unless-stopped
+<<<<<<< HEAD
     network_mode: host
     environment:
       - DB_HOST=127.0.0.1
@@ -13,6 +14,19 @@ services:
       - MW_SERVER=${MW_SERVER}
       - CF_ZONE_ID=${CF_ZONE_ID}
       - CF_API_TOKEN=${CF_API_TOKEN}
+=======
+    ports:
+      - "80:80"
+    environment:
+    - DB_HOST=db
+    - DB_NAME=mediawiki
+    - DB_USER=wiki
+    - DB_PASS=${DB_PASS}
+    - MW_SECRET_KEY=${MW_SECRET_KEY}
+    - MW_SERVER=${MW_SERVER}
+    - CF_ZONE_ID=${CF_ZONE_ID}
+    - CF_API_TOKEN=${CF_API_TOKEN}
+>>>>>>> master
     volumes:
       - ./LocalSettings.php:/var/www/html/LocalSettings.php
       - ./images:/var/www/html/images
@@ -30,7 +44,10 @@ services:
     image: mariadb:10.11
     container_name: mediawiki-db
     restart: unless-stopped
+<<<<<<< HEAD
     network_mode: host
+=======
+>>>>>>> master
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
       MYSQL_DATABASE: mediawiki
@@ -39,7 +56,11 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
+<<<<<<< HEAD
       test: ["CMD", "mariadb", "-h", "127.0.0.1", "-u", "root", "-p${DB_ROOT_PASS}", "-e", "SELECT 1"]
+=======
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+>>>>>>> master
       interval: 10s
       timeout: 5s
       retries: 5
