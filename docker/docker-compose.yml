@@ -47,16 +47,28 @@ services:
   static-files-sync:
     image: alpine/git
     container_name: static-files-sync
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     volumes:
       - static-files:/static-files
     entrypoint: /bin/sh
     command:
       - -c
       - |
+        git config --global http.lowSpeedLimit 1000
+        git config --global http.lowSpeedTime 300
         if [ -d /static-files/.git ]; then
           cd /static-files && git pull
         else
-          git clone --depth 1 https://github.com/openemr/website-openemr-files.git /static-files
+          MAX_RETRIES=3
+          RETRY=0
+          until [ $RETRY -ge $MAX_RETRIES ]; do
+            git clone --depth 1 --single-branch https://github.com/openemr/website-openemr-files.git /static-files && break
+            RETRY=$((RETRY+1))
+            echo "Clone failed, retry $RETRY of $MAX_RETRIES..."
+            sleep 30
+          done
         fi
 
 volumes:
