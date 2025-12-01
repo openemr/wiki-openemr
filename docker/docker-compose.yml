@@ -47,9 +47,7 @@ services:
   static-files-sync:
     image: alpine/git
     container_name: static-files-sync
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
+    network_mode: host
     volumes:
       - static-files:/static-files
     entrypoint: /bin/sh
