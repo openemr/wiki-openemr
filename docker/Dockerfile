@@ -20,4 +20,4 @@ RUN git clone --depth 1 \
 RUN git clone --depth 1 \
     https://gerrit.wikimedia.org/r/mediawiki/extensions/googleAnalytics \
     /var/www/html/extensions/googleAnalytics
-EOF
+    
