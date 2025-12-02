@@ -17,6 +17,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionDirectory = "$IP/extensions";
 $wgStyleDirectory = "$IP/skins";
 $wgScriptPath = "/wiki";
+$wgScript = "$wgScriptPath/index.php";
+$wgArticlePath = "$wgScript/$1";
 $wgStylePath = "$wgScriptPath/skins";
 $wgLogo = "$wgScriptPath/assets/openemr-logo-wiki.svg";
 
@@ -191,8 +193,8 @@ wfLoadExtension( 'CloudflarePurge' );
 $wgCloudflarePurgeZoneID = getenv('CF_ZONE_ID');
 $wgCloudflarePurgeToken = getenv('CF_API_TOKEN');
 
-wfLoadExtension( 'googleAnalytics' );
-$wgGoogleAnalyticsAccount = getenv('MW_GA_ACCT');
-
 ## Debug (disable in production)
 # $wgShowExceptionDetails = true;
+
+# maintenance mode
+#$wgReadOnly = "Wiki is temporarily in read-only mode due to maintenance.";
