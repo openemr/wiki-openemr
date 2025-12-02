@@ -192,7 +192,7 @@ $wgCloudflarePurgeZoneID = getenv('CF_ZONE_ID');
 $wgCloudflarePurgeToken = getenv('CF_API_TOKEN');
 
 wfLoadExtension( 'googleAnalytics' );
-$wgGoogleAnalyticsMetricsID = 'UA-8316288-7';
+$wgGoogleAnalyticsAccount = getenv('MW_GA_ACCT');
 
 ## Debug (disable in production)
 # $wgShowExceptionDetails = true;
