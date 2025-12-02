@@ -10,6 +10,7 @@ services:
       - DB_USER=wiki
       - DB_PASS=${DB_PASS}
       - MW_SECRET_KEY=${MW_SECRET_KEY}
+      - MW_COOKIE_PREFIX= ${MW_COOKIE_PREFIX};
       - MW_SERVER=${MW_SERVER}
       - CF_ZONE_ID=${CF_ZONE_ID}
       - CF_API_TOKEN=${CF_API_TOKEN}

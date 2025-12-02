@@ -37,6 +37,7 @@ $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 
 ## Security
 $wgSecretKey = getenv('MW_SECRET_KEY');
+$wgCookiePrefix = getenv('MW_COOKIE_PREFIX');
 
 ## Email
 $wgEnableEmail = true;
