@@ -3,6 +3,9 @@ FROM mediawiki:1.44
 # Install git for cloning extensions
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
+# Enable proxy modules
+RUN a2enmod ssl proxy proxy_http
+
 # EmbedVideo (StarCitizenWiki fork - works with 1.36+)
 RUN git clone --depth 1 \
     https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git \
