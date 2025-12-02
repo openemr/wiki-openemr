@@ -15,6 +15,7 @@ services:
       - CF_API_TOKEN=${CF_API_TOKEN}
     volumes:
       - ./LocalSettings.php:/var/www/html/LocalSettings.php
+      - ./robots.txt:/var/www/html/robots.txt
       - ./images:/var/www/html/images
       - ./skins/Openemr:/var/www/html/skins/Openemr
       - ./assets:/var/www/html/assets
