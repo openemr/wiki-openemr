@@ -17,8 +17,6 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionDirectory = "$IP/extensions";
 $wgStyleDirectory = "$IP/skins";
 $wgScriptPath = "/wiki";
-$wgArticlePath = "/wiki/$1";
-$wgUsePathInfo = true;
 $wgStylePath = "$wgScriptPath/skins";
 $wgLogo = "$wgScriptPath/assets/openemr-logo-wiki.svg";
 
@@ -192,6 +190,9 @@ wfLoadExtension( 'SyntaxHighlight_GeSHi' );
 wfLoadExtension( 'CloudflarePurge' );
 $wgCloudflarePurgeZoneID = getenv('CF_ZONE_ID');
 $wgCloudflarePurgeToken = getenv('CF_API_TOKEN');
+
+wfLoadExtension( 'googleAnalytics' );
+$wgGoogleAnalyticsMetricsID = 'UA-8316288-7';
 
 ## Debug (disable in production)
 # $wgShowExceptionDetails = true;
