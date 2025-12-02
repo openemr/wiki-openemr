@@ -20,6 +20,7 @@ services:
       - ./assets:/var/www/html/assets
       - static-files:/var/www/static-files:ro
       - ./apache-alias.conf:/etc/apache2/conf-enabled/apache-alias.conf
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       db:
         condition: service_healthy
