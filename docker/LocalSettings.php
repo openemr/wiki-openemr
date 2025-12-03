@@ -80,6 +80,13 @@ $wgDiff3 = "/usr/bin/diff3";
 
 ## Permissions - Anonymous users
 $wgGroupPermissions['*']['read'] = true;
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['*']['createpage'] = false;
+$wgGroupPermissions['*']['createtalk'] = false;
+$wgGroupPermissions['*']['createaccount'] = false;
+$wgGroupPermissions['*']['editmyoptions'] = false;
+$wgGroupPermissions['*']['editmyprivateinfo'] = false;
+$wgGroupPermissions['*']['viewmyprivateinfo'] = false;
 
 ## Permissions - Logged-in users
 $wgGroupPermissions['user']['move'] = true;
