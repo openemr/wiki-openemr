@@ -195,6 +195,7 @@ $wgPFEnableStringFunctions = true;
 
 wfLoadExtension( 'EmbedVideo' );
 wfLoadExtension( 'SyntaxHighlight_GeSHi' );
+wfLoadExtension( 'InputBox' );
 
 # Uncomment when ready to configure
 wfLoadExtension( 'CloudflarePurge' );
