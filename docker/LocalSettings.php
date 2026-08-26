@@ -78,6 +78,15 @@ $wgNamespacesWithSubpages[NS_MAIN] = true;
 $wgUseTeX = false;
 $wgDiff3 = "/usr/bin/diff3";
 
+## Custom namespace - weekly meeting summaries
+define( "NS_WEEKLY_MEETINGS", 3000 );
+define( "NS_WEEKLY_MEETINGS_TALK", 3001 );
+$wgExtraNamespaces[NS_WEEKLY_MEETINGS] = "Weekly_Meetings";
+$wgExtraNamespaces[NS_WEEKLY_MEETINGS_TALK] = "Weekly_Meetings_talk";
+$wgNamespacesWithSubpages[NS_WEEKLY_MEETINGS] = true;
+$wgNamespacesToBeSearchedDefault[NS_WEEKLY_MEETINGS] = true;
+$wgContentNamespaces[] = NS_WEEKLY_MEETINGS;
+
 ## Permissions - Anonymous users
 $wgGroupPermissions['*']['read'] = true;
 $wgGroupPermissions['*']['edit'] = false;
