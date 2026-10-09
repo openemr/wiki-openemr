@@ -14,6 +14,7 @@ services:
       - MW_SERVER=${MW_SERVER}
       - CF_ZONE_ID=${CF_ZONE_ID}
       - CF_API_TOKEN=${CF_API_TOKEN}
+      - GA4_MEASUREMENT_ID=${GA4_MEASUREMENT_ID}
     volumes:
       - ./LocalSettings.php:/var/www/html/LocalSettings.php
       - ./robots.txt:/var/www/html/robots.txt

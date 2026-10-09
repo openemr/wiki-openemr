@@ -194,15 +194,62 @@ $wgRightsUrl = "http://www.gnu.org/copyleft/fdl.html";
 $wgRightsText = "GNU Free Documentation License 1.3";
 $wgRightsIcon = "$wgStylePath/common/images/gnu-fdl.png";
 
+## Google Analytics 4, loaded only after consent. The banner script is served by
+## the website at the same origin, so one choice covers both site and wiki.
+## Special pages are skipped: reset and confirmation URLs carry secret tokens.
+$ga4Id = getenv( 'GA4_MEASUREMENT_ID' ) ?: '';
+
 ## Footer privacy link points to the Foundation-wide policy
-$wgHooks['SkinAddFooterLinks'][] = static function ( $skin, string $key, array &$footerItems ) {
-    if ( $key === 'places' ) {
-        $footerItems['privacy'] = \MediaWiki\Html\Html::element(
+$wgHooks['SkinAddFooterLinks'][] = static function ( $skin, string $key, array &$footerItems ) use ( $ga4Id ) {
+    if ( $key !== 'places' ) {
+        return;
+    }
+    $footerItems['privacy'] = \MediaWiki\Html\Html::element(
+        'a',
+        [ 'href' => 'https://www.open-emr.org/privacy/' ],
+        $skin->msg( 'privacy' )->text()
+    );
+    if ( $ga4Id !== '' && !$skin->getTitle()->isSpecialPage() ) {
+        $footerItems['cookie-settings'] = \MediaWiki\Html\Html::element(
             'a',
-            [ 'href' => 'https://www.open-emr.org/privacy/' ],
-            $skin->msg( 'privacy' )->text()
+            [ 'href' => '#', 'data-analytics-settings' => '' ],
+            'Cookie settings'
         );
     }
+};
+
+$wgHooks['BeforePageDisplay'][] = static function ( $out, $skin ) use ( $ga4Id ) {
+    if ( $ga4Id === '' || $out->getTitle()->isSpecialPage() ) {
+        return;
+    }
+    $out->addHeadItem( 'analytics-consent-style', '<style>'
+        . '.analytics-consent{position:fixed;left:0;right:0;bottom:0;z-index:1040;background:#212529;color:#fff;padding:.75rem 1rem;box-shadow:0 -2px 8px rgba(0,0,0,.2);font-size:.9rem}'
+        . '.analytics-consent[hidden]{display:none}'
+        . '.analytics-consent a{color:#fff;text-decoration:underline}'
+        . '.analytics-consent__inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem;max-width:1140px;margin:0 auto}'
+        . '.analytics-consent__text{margin:0;flex:1 1 20rem}'
+        . '.analytics-consent__actions{display:flex;gap:.5rem}'
+        . '.analytics-consent button{cursor:pointer;border-radius:.2rem;padding:.25rem .75rem;border:1px solid #f8f9fa;font-size:.875rem}'
+        . '.analytics-consent button[data-consent=denied]{background:transparent;color:#f8f9fa}'
+        . '.analytics-consent button[data-consent=granted]{background:#f8f9fa;color:#212529}'
+        . '</style>' );
+    $out->addHeadItem( 'analytics-consent-script',
+        '<script src="/js/analytics-consent.js" defer></script>' );
+    $out->addHTML( \MediaWiki\Html\Html::rawElement( 'div', [
+        'id' => 'analytics-consent',
+        'class' => 'analytics-consent',
+        'role' => 'dialog',
+        'aria-live' => 'polite',
+        'aria-label' => 'Analytics consent',
+        'data-ga-id' => $ga4Id,
+        'hidden' => true,
+    ], '<div class="analytics-consent__inner">'
+        . '<p class="analytics-consent__text">We\'d like to use Google Analytics cookies to understand how people use this site. '
+        . 'They\'re off unless you accept. <a href="https://www.open-emr.org/privacy/">Privacy Policy</a></p>'
+        . '<div class="analytics-consent__actions">'
+        . '<button type="button" data-consent="denied">Decline</button>'
+        . '<button type="button" data-consent="granted">Accept</button>'
+        . '</div></div>' ) );
 };
 
 ## Skin
