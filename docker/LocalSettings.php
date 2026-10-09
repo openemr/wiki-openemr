@@ -197,10 +197,20 @@ $wgRightsIcon = "$wgStylePath/common/images/gnu-fdl.png";
 ## Google Analytics 4, loaded only after consent. The banner script is served by
 ## the website at the same origin, so one choice covers both site and wiki.
 ## Special pages are skipped: reset and confirmation URLs carry secret tokens.
+## Logged-in admins are skipped so their editing doesn't skew the numbers.
 $ga4Id = getenv( 'GA4_MEASUREMENT_ID' ) ?: '';
+$ga4Enabled = static function ( $context ) use ( $ga4Id ) {
+    if ( $ga4Id === '' || $context->getTitle()->isSpecialPage() ) {
+        return false;
+    }
+    $groups = \MediaWiki\MediaWikiServices::getInstance()
+        ->getUserGroupManager()
+        ->getUserEffectiveGroups( $context->getUser() );
+    return !in_array( 'sysop', $groups, true );
+};
 
 ## Footer privacy link points to the Foundation-wide policy
-$wgHooks['SkinAddFooterLinks'][] = static function ( $skin, string $key, array &$footerItems ) use ( $ga4Id ) {
+$wgHooks['SkinAddFooterLinks'][] = static function ( $skin, string $key, array &$footerItems ) use ( $ga4Enabled ) {
     if ( $key !== 'places' ) {
         return;
     }
@@ -209,7 +219,7 @@ $wgHooks['SkinAddFooterLinks'][] = static function ( $skin, string $key, array &
         [ 'href' => 'https://www.open-emr.org/privacy/' ],
         $skin->msg( 'privacy' )->text()
     );
-    if ( $ga4Id !== '' && !$skin->getTitle()->isSpecialPage() ) {
+    if ( $ga4Enabled( $skin ) ) {
         $footerItems['cookie-settings'] = \MediaWiki\Html\Html::element(
             'a',
             [ 'href' => '#', 'data-analytics-settings' => '' ],
@@ -218,8 +228,8 @@ $wgHooks['SkinAddFooterLinks'][] = static function ( $skin, string $key, array &
     }
 };
 
-$wgHooks['BeforePageDisplay'][] = static function ( $out, $skin ) use ( $ga4Id ) {
-    if ( $ga4Id === '' || $out->getTitle()->isSpecialPage() ) {
+$wgHooks['BeforePageDisplay'][] = static function ( $out, $skin ) use ( $ga4Id, $ga4Enabled ) {
+    if ( !$ga4Enabled( $out ) ) {
         return;
     }
     $out->addHeadItem( 'analytics-consent-style', '<style>'
