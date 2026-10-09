@@ -194,6 +194,17 @@ $wgRightsUrl = "http://www.gnu.org/copyleft/fdl.html";
 $wgRightsText = "GNU Free Documentation License 1.3";
 $wgRightsIcon = "$wgStylePath/common/images/gnu-fdl.png";
 
+## Footer privacy link points to the Foundation-wide policy
+$wgHooks['SkinAddFooterLinks'][] = static function ( $skin, string $key, array &$footerItems ) {
+    if ( $key === 'places' ) {
+        $footerItems['privacy'] = \MediaWiki\Html\Html::element(
+            'a',
+            [ 'href' => 'https://www.open-emr.org/privacy/' ],
+            $skin->msg( 'privacy' )->text()
+        );
+    }
+};
+
 ## Skin
 $wgDefaultSkin = 'openemr';
 wfLoadSkin( 'Openemr' );
