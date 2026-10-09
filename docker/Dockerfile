@@ -15,9 +15,4 @@ RUN git clone --depth 1 \
 RUN git clone --depth 1 \
     https://gerrit.wikimedia.org/r/mediawiki/extensions/CloudflarePurge \
     /var/www/html/extensions/CloudflarePurge
-
-# GoogleAnalytics, deprecated, will move to CF
-RUN git clone --depth 1 \
-    https://gerrit.wikimedia.org/r/mediawiki/extensions/googleAnalytics \
-    /var/www/html/extensions/googleAnalytics
     
